@@ -1,8 +1,55 @@
-body {
-    background-color: lightcyan;
-
-    
-}
-
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FADADD;
+            color: #4A4A4A;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input {
+            width: 200px;
+        }
+        button {
+            background-color: #F4E1C1;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #EAC696;
+        }
+        #participants {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        video {
+            width: 300px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 2px solid #F4E1C1;
+        }
+        div {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 20px auto;
+        }
+        .image-container {
+            margin-top: 20px;
+        }
+        .image-container img {
+            width: 300px;
+            border-radius: 10px;
+        }
+  
 
 
