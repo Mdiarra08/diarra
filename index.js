@@ -2,17 +2,26 @@ var peer;
 var myStream;
 
 function ajoutVideo(stream) {
-     try {
-         var video = document.createElement('video');
-document.getElementById('participants').appendChild(video);
-         video.autoplay = true;
-         video.controls = true;
-         video.srcObject = stream;
-     
-     } catch (error) {
-         console.error(error);
-     }
+    try {
+       
+        let existingVideos = document.querySelectorAll('video');
+        for (let video of existingVideos) {
+            if (video.srcObject === stream) {
+                return; 
+            }
+        }
+        
+        var video = document.createElement('video');
+        document.getElementById('participants').appendChild(video);
+        video.autoplay = true;
+        video.controls = true;
+        video.srcObject = stream;
+        
+    } catch (error) {
+        console.error(error);
+    }
 }
+
 
 function register() {
      var name = document.getElementById('name').value;
@@ -49,7 +58,6 @@ function appelUser() {
          call.on('stream', function(remoteStream) {
              ajoutVideo(remoteStream);
          });
-         return;
      } catch (error) {
          console.error(error);
      }
