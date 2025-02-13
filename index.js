@@ -8,6 +8,7 @@ document.getElementById('participants').appendChild(video);
          video.autoplay = true;
          video.controls = true;
          video.srcObject = stream;
+         return;
      } catch (error) {
          console.error(error);
      }
