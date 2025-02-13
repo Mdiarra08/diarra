@@ -17,7 +17,7 @@
             width: 200px;
         }
         button {
-            background-color: #F4E1C1;
+            background-color: #180a0afc;
             color: white;
             cursor: pointer;
         }
@@ -34,7 +34,7 @@
             width: 300px;
             margin: 10px;
             border-radius: 10px;
-            border: 2px solid #F4E1C1;
+            border: 2px solid #180a01;
         }
         div {
             background: rgba(255, 255, 255, 0.1);
