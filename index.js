@@ -85,15 +85,22 @@ function addScreenShare() {
         .then((screenStream) => {
             console.log('Partage d\'écran démarré', screenStream);
 
-            // Remplace la caméra par l'écran temporairement
+            // Supprime la vidéo précédente du partage si elle existe
+            let existingScreenVideo = document.getElementById("video-self-screen");
+            if (existingScreenVideo) existingScreenVideo.remove();
+
+            // Ajout du partage d'écran dans l'interface locale
             ajoutVideo(screenStream, "self-screen");
 
-            // Appeler l'utilisateur avec le flux de l’écran
+            // Envoyer le flux de partage d’écran à l’utilisateur cible
             let call = peer.call(name, screenStream);
-            
-            // S'assurer que l'autre utilisateur reçoit bien le flux du partage d'écran
+
+            // Assurer que l'autre utilisateur reçoive bien le partage d'écran
             call.on('stream', function(remoteScreenStream) {
-                ajoutVideo(remoteScreenStream, `screen-${name}`); // Assurer qu'on affiche bien l'écran
+                let screenVideoId = `video-screen-${name}`;
+                if (!document.getElementById(screenVideoId)) {
+                    ajoutVideo(remoteScreenStream, screenVideoId);
+                }
             });
 
             // Lorsqu'on arrête le partage d'écran, remettre la caméra normale
@@ -108,3 +115,4 @@ function addScreenShare() {
             alert('Impossible de partager l\'écran.');
         });
 }
+
