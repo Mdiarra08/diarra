@@ -1,3 +1,6 @@
+var peer;
+var myStream;
+
 // Fonction pour ajouter une vidéo sans duplication
 function ajoutVideo(stream, userId) {
     let existingVideo = document.getElementById(`video-${userId}`);
@@ -15,7 +18,6 @@ function ajoutVideo(stream, userId) {
 
 // Création du peer (utilisateur)
 var peer = new Peer();
-var myStream;
 
 // Récupération du flux utilisateur (audio + vidéo)
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -52,30 +54,52 @@ function appelUser() {
         document.getElementById('add').value = ""; // Réinitialiser l'entrée
     }
 }
+function addScreenShare() {
+    var name = document.getElementById('share').value;
+    document.getElementById('share').value = ""; // Réinitialise le champ de saisie
 
-// Fonction pour partager l'écran
-function partagerEcran() {
-    navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
-        .then(function(screenStream) {
-            // Remplace le flux vidéo actuel par le partage d'écran
-            let screenTrack = screenStream.getVideoTracks()[0];
-            let sender = peer.connections[Object.keys(peer.connections)[0]][0].peerConnection.getSenders()
-                .find(s => s.track.kind === "video");
+    navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: true })
+        .then((stream) => {
+            // Assurer que le flux d'écran a bien été capturé
+            console.log('Partage d\'écran démarré', stream);
+            
+            // Appeler l'utilisateur avec le flux d'écran
+            let call = peer.call(name, stream);
 
-            if (sender) {
-                sender.replaceTrack(screenTrack);
-            }
-
-            // Ajouter l'affichage du partage d'écran
-            ajoutVideo(screenStream, "screen");
-
-            // Rétablir la vidéo de la webcam une fois le partage terminé
-            screenTrack.onended = function() {
-                sender.replaceTrack(myStream.getVideoTracks()[0]);
-                document.getElementById(video-screen).remove();
-            };
+            call.on('stream', function(remoteStream) {
+                ajoutVideo(remoteStream, name); // Afficher le flux vidéo distant
+            });
         })
-        .catch(function(error) {
-            console.error("Erreur lors du partage d'écran :", error);
+        .catch((err) => {
+            console.error('Erreur lors du partage d\'écran:', err);
+            alert('Impossible de partager l\'écran.');
         });
 }
+
+function register() {
+     var name = document.getElementById('name').value;
+     try {
+         peer = new Peer(name);
+         navigator.getUserMedia({video: true, audio: true},
+function(stream) {
+             myStream = stream;
+             ajoutVideo(stream);
+             document.getElementById('register').style.display = 'none';
+             document.getElementById('userAdd').style.display = 'block';
+             document.getElementById('userShare').style.display = 'block';
+
+             peer.on('call', function(call) {
+                 call.answer(myStream);
+                 call.on('stream', function(remoteStream) {
+                     ajoutVideo(remoteStream);
+                 });
+             });
+  }, function(err) {
+             console.log('Failed to get local stream', err);
+         });
+
+     } catch (error) {
+         console.error(error);
+     }
+}
+
