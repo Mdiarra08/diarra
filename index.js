@@ -71,7 +71,6 @@ function appelUser() {
     document.getElementById('add').value = ""; // Réinitialiser l'entrée
 }
 
-// Fonction pour partager l'écran
 function addScreenShare() {
     var name = document.getElementById('share').value.trim();
     document.getElementById('share').value = ""; // Réinitialise le champ de saisie
@@ -82,31 +81,31 @@ function addScreenShare() {
     }
 
     navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: true })
-        .then((screenStream) => {
-            console.log('Partage d\'écran démarré', screenStream);
+        .then((stream) => {
+            console.log('Partage d\'écran démarré', stream);
 
-            // Supprime la vidéo précédente du partage si elle existe
+            // Supprimer l'ancienne vidéo de partage d'écran si elle existe
             let existingScreenVideo = document.getElementById("video-self-screen");
             if (existingScreenVideo) existingScreenVideo.remove();
 
-            // Ajout du partage d'écran dans l'interface locale
-            ajoutVideo(screenStream, "self-screen");
+            // Ajouter la vidéo du partage d'écran pour l'utilisateur local
+            ajoutVideo(stream, "self-screen");
 
-            // Envoyer le flux de partage d’écran à l’utilisateur cible
-            let call = peer.call(name, screenStream);
+            // Appeler l'utilisateur avec le flux de partage d’écran
+            let call = peer.call(name, stream);
 
-            // Assurer que l'autre utilisateur reçoive bien le partage d'écran
-            call.on('stream', function(remoteScreenStream) {
+            // S'assurer que l'utilisateur invité reçoive bien le partage d'écran
+            call.on('stream', function(remoteStream) {
                 let screenVideoId = `video-screen-${name}`;
                 if (!document.getElementById(screenVideoId)) {
-                    ajoutVideo(remoteScreenStream, screenVideoId);
+                    ajoutVideo(remoteStream, screenVideoId);
                 }
             });
 
-            // Lorsqu'on arrête le partage d'écran, remettre la caméra normale
-            screenStream.getVideoTracks()[0].onended = function() {
+            // Gérer la fin du partage et remettre la caméra normale
+            stream.getVideoTracks()[0].onended = function() {
                 console.log("Partage d'écran terminé");
-                document.getElementById("video-self-screen")?.remove(); // Supprime la vidéo du partage d'écran
+                document.getElementById("video-self-screen")?.remove(); // Supprimer la vidéo du partage d'écran
                 ajoutVideo(myStream, "self"); // Remet la caméra normale après le partage d'écran
             };
         })
@@ -115,4 +114,5 @@ function addScreenShare() {
             alert('Impossible de partager l\'écran.');
         });
 }
+
 
