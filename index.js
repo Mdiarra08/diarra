@@ -73,7 +73,7 @@ function appelUser() {
 
 function addScreenShare() {
     var name = document.getElementById('share').value.trim();
-    document.getElementById('share').value = ""; // Réinitialise le champ de saisie
+    document.getElementById('share').value = ""; // Réinitialiser l'entrée
 
     if (!name || !peer) {
         alert("Veuillez entrer un nom valide et vous enregistrer d'abord !");
@@ -88,15 +88,21 @@ function addScreenShare() {
             let existingScreenVideo = document.getElementById("video-self-screen");
             if (existingScreenVideo) existingScreenVideo.remove();
 
-            // Ajouter la vidéo du partage d'écran pour l'utilisateur local
+            // Ajouter la vidéo du partage d'écran pour l'administrateur
             ajoutVideo(stream, "self-screen");
 
-            // Appeler l'utilisateur avec le flux de partage d’écran
+            // Envoyer le flux de partage d’écran à l'invité
             let call = peer.call(name, stream);
 
-            // S'assurer que l'utilisateur invité reçoive bien le partage d'écran
+            // S'assurer que l'invité reçoit bien le flux
             call.on('stream', function(remoteStream) {
                 let screenVideoId = `video-screen-${name}`;
+                
+                // Supprimer l'ancienne vidéo de la caméra pour éviter la duplication
+                let existingUserVideo = document.getElementById(`video-${name}`);
+                if (existingUserVideo) existingUserVideo.remove();
+                
+                // Ajouter la vidéo du partage d'écran pour l'invité
                 if (!document.getElementById(screenVideoId)) {
                     ajoutVideo(remoteStream, screenVideoId);
                 }
@@ -114,5 +120,6 @@ function addScreenShare() {
             alert('Impossible de partager l\'écran.');
         });
 }
+
 
 
