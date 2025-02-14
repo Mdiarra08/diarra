@@ -18,16 +18,16 @@ src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
      <div id="userAdd" style="display: none;">
          <h1>Se Connecter à un autre utilisateur:</h1>
          <form onsubmit="appelUser(); return false;" accept-charset="UTF-8">
-             <input type="text" name="name" value="" id="add" required>
-             <input type="submit" value="Add">
+             <input type="text" name="name" value="" id="add" placeholder="Nom de l'utilisateur"required>
+             <input type="submit" value="Ajouter">
          </form>
      </div>
      <div id="userShare" style="display: none;">
          <h1>Partager son écran:</h1>
          <form onsubmit="addScreenShare(); return false;"
 accept-charset="UTF-8">
-             <input type="text" name="name" value="" id="share" required>
-             <input type="submit" value="Share">
+             <input type="text" name="name" value="" id="share"  placeholder="Nom de l'utilisateur"required>
+             <input type="submit" value="Partager">
          </form>
      </div>
      <div id="participants"></div>
